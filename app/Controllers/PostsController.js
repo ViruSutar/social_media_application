@@ -125,7 +125,6 @@ const deletePost = async (req, res) => {
     console.log(error);
   }
 };
-
 module.exports = {
   createPost,
   deletePost,

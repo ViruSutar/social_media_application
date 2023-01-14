@@ -2,20 +2,20 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const User = require("../Models/User");
 dotenv.config({ path: "./.env" });
-const { validationResult } = require('express-validator')
+const { validationResult } = require("express-validator");
 
-const validationError = (req,res)=>{
+const validationError = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.errors[0].msg });
   }
-}
+};
 
 const authenticate = async (req, res) => {
   const { email, password } = req.body;
   try {
     // validators
-    validationError(req,res)
+    validationError(req, res);
 
     const user = await User.findOne({ email });
 
@@ -35,19 +35,18 @@ const authenticate = async (req, res) => {
       expiresIn: "2h",
     });
 
-    return res.send({ success: true, token });
+    return res.status(200).send({ success: true, token });
   } catch (error) {
     console.log(error);
   }
 };
-
 
 const createUser = async (req, res) => {
   try {
     const { email, name, password } = req.body;
 
     // validator
-    validationError(req,res)
+    validationError(req, res);
 
     await User.create({
       name,
@@ -61,8 +60,25 @@ const createUser = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const user = await User.find();
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
+    }
+
+    return res.status(200).json({ success: true, User: user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createUser,
   authenticate,
-  validationError
+  validationError,
+  getUsers,
 };
