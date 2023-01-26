@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app/app.js",
-    "test": "jest --watch"
+    "start": "nodemon app/server.js",
+    "test": "env-cm ./test.env jest --watch"
   },
   "jest": {
     "testEnvironment": "node"

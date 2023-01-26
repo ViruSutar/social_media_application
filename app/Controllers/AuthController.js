@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const User = require("../Models/User");
+const Post = require("../Models/Post");
 dotenv.config({ path: "./.env" });
 const { validationResult } = require("express-validator");
 
@@ -62,11 +63,14 @@ const createUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const user = await User.find();
-
+   const user =await User.find()
+   const posts = await Post.find()
+ 
+    // console.log("user ",user );
+    // console.log("posts",posts);
     if (!user) {
       return res
-        .status(404)
+        .status(400)
         .json({ success: false, message: "Data not found" });
     }
 
